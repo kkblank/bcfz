@@ -1,4 +1,4 @@
-export function render(container) {
+export async function render(container) {
   container.innerHTML = `
     <section class="hero">
       <h2>本草方知</h2>
@@ -32,8 +32,30 @@ export function render(container) {
         <div class="type-name">一键投诉</div>
         <div class="type-desc">联系作者，反馈页面bug，但请提供详细操作步骤方便定位</div>
       </div>
+      <div class="type-card fav-card" data-action="favorites">
+        <div class="type-icon">⭐</div>
+        <div class="type-name">收藏夹</div>
+        <div class="type-desc">查看收藏的中药和方剂</div>
+      </div>
+    </div>
+
+    <div class="dark-toggle-wrap">
+      <button class="dark-toggle-btn" id="dark-toggle-btn">
+        <span id="dark-toggle-icon">${document.documentElement.classList.contains('dark') ? '☀️' : '🌙'}</span>
+        <span id="dark-toggle-text">${document.documentElement.classList.contains('dark') ? '浅色模式' : '深色模式'}</span>
+      </button>
     </div>
   `;
+
+  const darkBtn = container.querySelector('#dark-toggle-btn');
+  if (darkBtn) {
+    darkBtn.addEventListener('click', async () => {
+      const { toggleDarkMode } = await import('../store.js');
+      const isDark = toggleDarkMode();
+      document.getElementById('dark-toggle-icon').textContent = isDark ? '☀️' : '🌙';
+      document.getElementById('dark-toggle-text').textContent = isDark ? '浅色模式' : '深色模式';
+    });
+  }
 
   container.querySelectorAll('.type-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -41,6 +63,8 @@ export function render(container) {
         location.hash = '#search';
       } else if (card.dataset.action === 'complaint') {
         window.open('https://space.bilibili.com/2805045', '_blank');
+      } else if (card.dataset.action === 'favorites') {
+        location.hash = '#favorites';
       } else {
         location.hash = '#category?type=' + card.dataset.type;
       }

@@ -49,11 +49,12 @@ export function render(container, params) {
       ${subCats.length === 0 ? '<div class="empty-state"><div class="empty-icon">🌱</div><div class="empty-text">暂无内容</div></div>' : ''}
     `;
 
+    const catName = params.catName || '';
     container.querySelectorAll('.category-card').forEach(card => {
       card.addEventListener('click', () => {
         const id = card.dataset.id;
         const name = card.dataset.name;
-        location.hash = `#list?type=${type}&subId=${id}&subName=${encodeURIComponent(name)}`;
+        location.hash = `#list?type=${type}&subId=${id}&subName=${encodeURIComponent(name)}&catId=${catId}&catName=${encodeURIComponent(catName)}`;
       });
     });
   }

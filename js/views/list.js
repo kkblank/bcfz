@@ -31,7 +31,7 @@ export function render(container, params) {
     card.addEventListener('click', () => {
       const id = card.dataset.id;
       const name = card.dataset.name;
-      location.hash = `#detail?type=${type}&id=${id}&name=${encodeURIComponent(name)}`;
+      location.hash = `#detail?type=${type}&id=${id}&name=${encodeURIComponent(name)}&catId=${params.catId || ''}&catName=${encodeURIComponent(params.catName || '')}&subId=${params.subId}&subName=${encodeURIComponent(params.subName || '')}`;
     });
   });
 }

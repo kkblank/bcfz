@@ -12,7 +12,13 @@
     <header id="app-header">
       <button id="back-btn" aria-label="返回">←</button>
       <h1 id="app-title">本草方知</h1>
+      <div id="font-controls" class="hidden">
+        <button id="font-minus" aria-label="缩小字号">A⁻</button>
+        <span id="font-display">100%</span>
+        <button id="font-plus" aria-label="放大字号">A⁺</button>
+      </div>
     </header>
+    <nav id="breadcrumb"></nav>
     <main id="app-content"></main>
   </div>
   <script type="module" src="./js/app.js"></script>
