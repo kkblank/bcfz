@@ -1,10 +1,49 @@
+import { getRecentSearches } from '../store.js';
+
 export async function render(container) {
+  const recentSearches = getRecentSearches().slice(0, 5);
+
   container.innerHTML = `
     <section class="hero">
       <h2>本草方知</h2>
       <p class="desc">基于全国高等中医药院校规划教材，收录中药学与方剂学核心内容</p>
       <p class="disclaimer">仅供参考学习，不构成医疗建议</p>
     </section>
+
+    <div class="section-label">搜索全部</div>
+    <div class="home-search-section">
+      <div class="search-box">
+        <div class="search-input-wrap">
+          <span>🔍</span>
+          <input type="text" id="home-search-input" placeholder="搜索名称、功效、功用、主治..." autocomplete="off">
+        </div>
+        <button class="search-btn" id="home-search-btn">搜索</button>
+      </div>
+      ${recentSearches.length > 0 ? `
+      <div class="recent-tags" style="margin-top:10px">
+        ${recentSearches.map(k => `<span class="recent-tag" data-kw="${escapeHtml(k)}">${escapeHtml(k)}</span>`).join('')}
+      </div>
+      ` : ''}
+    </div>
+
+    <div class="section-label">功能模块</div>
+    <div class="card-grid two-col">
+      <div class="type-card recent-card" data-action="recent">
+        <div class="type-icon">🕐</div>
+        <div class="type-name">最近浏览</div>
+        <div class="type-desc">查看最近浏览的中药和方剂</div>
+      </div>
+      <div class="type-card fav-card" data-action="favorites">
+        <div class="type-icon">⭐</div>
+        <div class="type-name">收藏夹</div>
+        <div class="type-desc">查看收藏的中药和方剂</div>
+      </div>
+      <div class="type-card complaint-card" data-action="complaint">
+        <div class="type-icon">📩</div>
+        <div class="type-name">一键投诉</div>
+        <div class="type-desc">联系作者，反馈页面bug，但请提供详细操作步骤方便定位</div>
+      </div>
+    </div>
 
     <div class="section-label">知识库</div>
     <div class="card-grid two-col">
@@ -20,25 +59,6 @@ export async function render(container) {
       </div>
     </div>
 
-    <div class="section-label">功能模块</div>
-    <div class="card-grid two-col">
-      <div class="type-card search-card" data-action="search">
-        <div class="type-icon">🔍</div>
-        <div class="type-name">搜索全部</div>
-        <div class="type-desc">跨数据源搜索名称、功效、功用、主治等内容</div>
-      </div>
-      <div class="type-card complaint-card" data-action="complaint">
-        <div class="type-icon">📩</div>
-        <div class="type-name">一键投诉</div>
-        <div class="type-desc">联系作者，反馈页面bug，但请提供详细操作步骤方便定位</div>
-      </div>
-      <div class="type-card fav-card" data-action="favorites">
-        <div class="type-icon">⭐</div>
-        <div class="type-name">收藏夹</div>
-        <div class="type-desc">查看收藏的中药和方剂</div>
-      </div>
-    </div>
-
     <div class="dark-toggle-wrap">
       <button class="dark-toggle-btn" id="dark-toggle-btn">
         <span id="dark-toggle-icon">${document.documentElement.classList.contains('dark') ? '☀️' : '🌙'}</span>
@@ -46,6 +66,24 @@ export async function render(container) {
       </button>
     </div>
   `;
+
+  function doSearch() {
+    const input = document.getElementById('home-search-input');
+    const kw = input.value.trim();
+    if (!kw) return;
+    location.hash = '#search?q=' + encodeURIComponent(kw);
+  }
+
+  document.getElementById('home-search-btn').addEventListener('click', doSearch);
+  document.getElementById('home-search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  container.querySelectorAll('.recent-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      location.hash = '#search?q=' + encodeURIComponent(tag.dataset.kw);
+    });
+  });
 
   const darkBtn = container.querySelector('#dark-toggle-btn');
   if (darkBtn) {
@@ -59,15 +97,20 @@ export async function render(container) {
 
   container.querySelectorAll('.type-card').forEach(card => {
     card.addEventListener('click', () => {
-      if (card.dataset.action === 'search') {
-        location.hash = '#search';
-      } else if (card.dataset.action === 'complaint') {
+      if (card.dataset.action === 'complaint') {
         window.open('https://space.bilibili.com/2805045', '_blank');
       } else if (card.dataset.action === 'favorites') {
         location.hash = '#favorites';
+      } else if (card.dataset.action === 'recent') {
+        location.hash = '#recent';
       } else {
         location.hash = '#category?type=' + card.dataset.type;
       }
     });
   });
+}
+
+function escapeHtml(str) {
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return str.replace(/[&<>"']/g, c => map[c]);
 }

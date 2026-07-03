@@ -70,6 +70,40 @@ function applyDarkMode(enabled) {
   document.documentElement.classList.toggle('dark', enabled);
 }
 
+/* ─── Search History ─── */
+
+function getRecentSearches() {
+  try { return JSON.parse(localStorage.getItem('bcfz_recent_searches') || '[]').slice(0, 10); }
+  catch { return []; }
+}
+
+function saveRecentSearch(keyword) {
+  let list = getRecentSearches();
+  const idx = list.indexOf(keyword);
+  if (idx > -1) list.splice(idx, 1);
+  list.unshift(keyword);
+  localStorage.setItem('bcfz_recent_searches', JSON.stringify(list.slice(0, 10)));
+}
+
+function clearRecentSearches() {
+  localStorage.removeItem('bcfz_recent_searches');
+}
+
+/* ─── Recent Views ─── */
+
+function getRecentViews() {
+  try { return JSON.parse(localStorage.getItem('bcfz_recent_views') || '[]').slice(0, 10); }
+  catch { return []; }
+}
+
+function addRecentView(item) {
+  let list = getRecentViews();
+  const idx = list.findIndex(v => v.id === item.id);
+  if (idx > -1) list.splice(idx, 1);
+  list.unshift({ id: item.id, name: item.name, type: item.type });
+  localStorage.setItem('bcfz_recent_views', JSON.stringify(list.slice(0, 10)));
+}
+
 /* ─── Init ─── */
 
 function initAppearance() {
@@ -82,4 +116,6 @@ export {
   getFontScale, setFontScale,
   isDarkMode, setDarkMode, toggleDarkMode,
   initAppearance, SCALE_MIN, SCALE_MAX, SCALE_STEP,
+  getRecentViews, addRecentView,
+  getRecentSearches, saveRecentSearch, clearRecentSearches,
 };

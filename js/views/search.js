@@ -1,26 +1,7 @@
 import { search } from '../data.js';
+import { getRecentSearches, saveRecentSearch, clearRecentSearches } from '../store.js';
 
-const STORAGE_KEY = 'bcfz_recent_searches';
-
-function getRecentSearches() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').slice(0, 10);
-  } catch { return []; }
-}
-
-function saveRecentSearch(keyword) {
-  let list = getRecentSearches();
-  const idx = list.indexOf(keyword);
-  if (idx > -1) list.splice(idx, 1);
-  list.unshift(keyword);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, 10)));
-}
-
-function clearRecentSearches() {
-  localStorage.removeItem(STORAGE_KEY);
-}
-
-export function render(container) {
+export function render(container, params) {
   container.innerHTML = `
     <div class="search-box">
       <div class="search-input-wrap">
@@ -117,6 +98,11 @@ export function render(container) {
   });
 
   renderRecent();
+
+  if (params.q) {
+    input.value = params.q;
+    doSearch();
+  }
 }
 
 function escapeHtml(str) {

@@ -6,6 +6,7 @@ import { render as renderList } from './views/list.js';
 import { render as renderDetail } from './views/detail.js';
 import { render as renderSearch } from './views/search.js';
 import { render as renderFavorites } from './views/favorites.js';
+import { render as renderRecent } from './views/recent.js';
 
 const routes = {
   '': renderHome,
@@ -15,6 +16,7 @@ const routes = {
   'detail': renderDetail,
   'search': renderSearch,
   'favorites': renderFavorites,
+  'recent': renderRecent,
 };
 
 function parseHash() {
@@ -39,6 +41,7 @@ window.navigateTo = navigateTo;
 
 function getHeaderTitle(view, params) {
   if (view === 'favorites') return '收藏夹';
+  if (view === 'recent') return '最近浏览';
   if (view === 'search') return '搜索';
   if (view === 'category') {
     if (params.catName) return decodeURIComponent(params.catName);
@@ -92,6 +95,8 @@ function renderBreadcrumb(view, params) {
     parts.push(`<span class="sep">›</span> <span class="current">搜索</span>`);
   } else if (view === 'favorites') {
     parts.push(`<span class="sep">›</span> <span class="current">收藏夹</span>`);
+  } else if (view === 'recent') {
+    parts.push(`<span class="sep">›</span> <span class="current">最近浏览</span>`);
   }
 
   el.innerHTML = parts.join(' ');

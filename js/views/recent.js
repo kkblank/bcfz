@@ -1,0 +1,41 @@
+import { getRecentViews } from '../store.js';
+
+export function render(container) {
+  const list = getRecentViews();
+
+  if (list.length === 0) {
+    container.innerHTML = '<div class="fav-empty"><div class="fav-empty-icon">🕐</div><div class="fav-empty-text">还没有浏览过任何条目</div><div class="empty-hint">浏览具体的药或方后将在这里显示</div></div>';
+    return;
+  }
+
+  const label = t => t === 'formula' ? '方剂' : '草药';
+
+  container.innerHTML = `
+    <div class="item-list">
+      ${list.map((item, i) => `
+        <div class="item-card ${item.type}" data-id="${item.id}" data-name="${item.name}" data-type="${item.type}">
+          <div class="number">${i + 1}</div>
+          <div class="info">
+            <div class="name">${escapeHtml(item.name)}</div>
+            <div class="summary">${label(item.type)}</div>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  container.querySelectorAll('.item-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      const name = card.dataset.name;
+      const dtype = card.dataset.type;
+      location.hash = `#detail?type=${dtype}&id=${id}&name=${encodeURIComponent(name)}`;
+    });
+  });
+}
+
+function escapeHtml(str) {
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return str.replace(/[&<>"']/g, c => map[c]);
+}
