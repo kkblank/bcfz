@@ -37,13 +37,15 @@ body {
   z-index: 100;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 12px 16px;
   background: var(--herb-gradient);
   color: white;
-  gap: 12px;
 }
 
 #back-btn {
+  position: absolute;
+  left: 16px;
   background: rgba(255,255,255,0.2);
   border: none;
   color: white;
@@ -98,36 +100,48 @@ body {
   margin-top: 8px;
 }
 
-/* ─── Type Cards ─── */
-.type-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 8px;
+/* ─── Section labels ─── */
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 20px 4px 8px;
+  letter-spacing: 1px;
+}
+
+/* ─── Card Grid ─── */
+.card-grid { padding: 0 4px; }
+.card-grid.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .type-card {
   background: var(--card-bg);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 18px 14px;
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: transform 0.15s, box-shadow 0.15s;
+  text-align: center;
 }
 
 .type-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
 .type-card:active { transform: translateY(0); }
 
-.type-card.herb { border-left: 5px solid var(--herb-light); }
-.type-card.formula { border-left: 5px solid var(--formula-light); }
-.type-card.search-card { border-left: 5px solid #78909c; }
+.type-card.herb { border-top: 4px solid var(--herb-light); }
+.type-card.formula { border-top: 4px solid var(--formula-light); }
+.type-card.search-card { border-top: 4px solid #78909c; }
+.type-card.complaint-card { border-top: 4px solid #e53935; }
 
-.type-icon { font-size: 40px; margin-bottom: 8px; }
-.type-name { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.type-icon { font-size: 32px; margin-bottom: 6px; }
+.type-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
 .type-card.herb .type-name { color: var(--herb-primary); }
 .type-card.formula .type-name { color: var(--formula-primary); }
 .type-card.search-card .type-name { color: #78909c; }
-.type-desc { font-size: 13px; color: var(--text-secondary); }
+.type-card.complaint-card .type-name { color: #e53935; }
+.type-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
 
 /* ─── Category / List Cards ─── */
 .category-list, .item-list {
