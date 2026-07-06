@@ -7,6 +7,7 @@ import { render as renderDetail } from './views/detail.js';
 import { render as renderSearch } from './views/search.js';
 import { render as renderFavorites } from './views/favorites.js';
 import { render as renderRecent } from './views/recent.js';
+import { render as renderAcupoint } from './views/acupoint.js';
 
 const routes = {
   '': renderHome,
@@ -17,6 +18,7 @@ const routes = {
   'search': renderSearch,
   'favorites': renderFavorites,
   'recent': renderRecent,
+  'acupoint': renderAcupoint,
 };
 
 function parseHash() {
@@ -41,6 +43,7 @@ window.navigateTo = navigateTo;
 
 function getHeaderTitle(view, params) {
   if (view === 'favorites') return '收藏夹';
+  if (view === 'acupoint') return '人体穴位';
   if (view === 'recent') return '最近浏览';
   if (view === 'search') return '搜索';
   if (view === 'category') {

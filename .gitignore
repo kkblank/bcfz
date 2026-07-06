@@ -36,12 +36,12 @@ build/
 local.properties
 
 # Image files
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.ico
-*.bmp
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+# *.ico
+# *.bmp
 
 # Environment & secrets
 .env

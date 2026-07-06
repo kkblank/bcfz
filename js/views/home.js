@@ -49,7 +49,12 @@ export async function render(container) {
       <div class="type-card formula" data-type="formula">
         <div class="type-icon">📜</div>
         <div class="type-name">方剂学</div>
-        <div class="type-desc">查询方剂的组成、功用、主治、用法等信息</div>
+       <div class="type-desc">查询方剂的组成、功用、主治、用法等信息</div>
+     </div>
+      <div class="type-card acupoint" data-type="acupoint">
+        <div class="type-icon">🧍</div>
+        <div class="type-name">人体穴位</div>
+        <div class="type-desc">查看正面、背面、侧面穴位分布图</div>
       </div>
     </div>
 
@@ -109,6 +114,8 @@ export async function render(container) {
         location.hash = '#favorites';
       } else if (card.dataset.action === 'recent') {
         location.hash = '#recent';
+      } else if (card.dataset.type === 'acupoint') {
+        location.hash = '#acupoint';
       } else {
         location.hash = '#category?type=' + card.dataset.type;
       }
