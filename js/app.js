@@ -128,6 +128,8 @@ async function route() {
     console.error('Render error:', e);
     container.innerHTML = '<p class="error-msg">页面渲染失败，请刷新重试</p><p style="color:#999;font-size:13px;word-break:break-all">' + e.message + '</p>';
   }
+  /* 统计页面浏览（GoatCounter SPA 支持） */
+  if (window.goatcounter) goatcounter.count();
 }
 
 function initFontControls() {
