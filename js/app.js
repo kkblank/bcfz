@@ -131,13 +131,12 @@ async function route() {
     console.error('Render error:', e);
     container.innerHTML = '<p class="error-msg">页面渲染失败，请刷新重试</p><p style="color:#999;font-size:13px;word-break:break-all">' + e.message + '</p>';
   }
-  /* 首页访问计数：直接向 GoatCounter 发 Beacon 请求 */
-  if (view === '' || view === 'home') {
-    try {
-      navigator.sendBeacon('https://bcfz.goatcounter.com/count',
-        new Blob([JSON.stringify({ p: '/', r: document.referrer })], { type: 'text/plain' }));
-    } catch (e) { /* ignore */ }
-  }
+  /* 访问统计：通过官方 count.js 记录路由切换 */
+  try {
+    if (window.goatcounter) {
+      goatcounter.count({ path: location.hash.replace(/^#/, '') || '/' });
+    }
+  } catch (e) { /* ignore */ }
 }
 
 function initFontControls() {
