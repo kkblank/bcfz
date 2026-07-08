@@ -1,17 +1,22 @@
 let herbsData = null;
 let formulasData = null;
+let internalData = null;
 
 async function loadAll() {
-  const [herbs, formulas] = await Promise.all([
+  const [herbs, formulas, internal] = await Promise.all([
     fetch('./data/herbs.json').then(r => r.json()),
-    fetch('./data/formulas.json').then(r => r.json())
+    fetch('./data/formulas.json').then(r => r.json()),
+    fetch('./data/internal_medicine.json').then(r => r.json())
   ]);
   herbsData = herbs;
   formulasData = formulas;
+  internalData = internal;
 }
 
 function getAllData(type) {
-  return type === 'formula' ? formulasData : herbsData;
+  if (type === 'formula') return formulasData;
+  if (type === 'internal') return internalData;
+  return herbsData;
 }
 
 function getCategories(type) {
@@ -45,7 +50,7 @@ function search(keyword) {
   const results = [];
   const seenIds = new Set();
 
-  for (const type of ['herb', 'formula']) {
+  for (const type of ['herb', 'formula', 'internal']) {
     const data = getAllData(type);
     if (!data) continue;
     for (const item of data.searchIndex) {

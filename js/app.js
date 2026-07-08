@@ -69,7 +69,7 @@ function renderBreadcrumb(view, params) {
   }
   el.style.display = '';
 
-  const typeName = params.type === 'formula' ? '方剂学' : '中药学';
+  const typeName = params.type === 'formula' ? '方剂学' : params.type === 'internal' ? '内科学' : '中药学';
   const parts = ['<a href="#/">首页</a>'];
 
   if (view === 'category') {

@@ -615,6 +615,13 @@ body {
 /* --- Acupoint (人体穴位) --- */
 .type-card.acupoint { border-top: 4px solid #e53935; }
 .type-card.acupoint .type-name { color: #c62828; }
+.type-card.internal { border-top: 4px solid #1565c0; }
+.type-card.internal .type-name { color: #1565c0; }
+.detail-header.internal { background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%); }
+.detail-header.internal ~ .detail-body .detail-section .label { color: #1565c0; }
+.result-card.internal { border-left-color: #42a5f5; }
+.result-card.internal .r-name { color: #1565c0; }
+.result-card.internal .r-badge { background: #42a5f5; }
 
 .acupoint-view {
   display: flex;

@@ -56,6 +56,11 @@ export async function render(container) {
         <div class="type-name">人体穴位</div>
         <div class="type-desc">查看正面、背面、侧面穴位分布图</div>
       </div>
+      <div class="type-card internal" data-type="internal">
+        <div class="type-icon">🏥</div>
+        <div class="type-name">内科学</div>
+        <div class="type-desc">查询中医内科疾病辨证论治内容</div>
+      </div>
     </div>
 
     <div class="dark-toggle-wrap">
