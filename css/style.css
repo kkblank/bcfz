@@ -327,6 +327,7 @@ body {
 }
 
 .item-card.formula .number { background: var(--formula-gradient); }
+.item-card.internal .number { background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%); }
 
 .category-card .arrow, .item-card .arrow {
   font-size: calc(22px * var(--font-scale));
