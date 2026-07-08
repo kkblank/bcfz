@@ -6,7 +6,7 @@ export function render(container, params) {
 
   if (!catId) {
     const cats = getCategories(type);
-    const label = type === 'formula' ? '方剂' : '草药';
+    const label = type === 'formula' ? '方剂' : type === 'internal' ? '病症' : '草药';
     container.innerHTML = `
       <div class="category-list">
         ${cats.map(c => `
@@ -32,7 +32,7 @@ export function render(container, params) {
     });
   } else {
     const subCats = getSubCategories(catId, type);
-    const label = type === 'formula' ? '个方剂' : '种草药';
+    const label = type === 'formula' ? '个方剂' : type === 'internal' ? '个证型' : '种草药';
     container.innerHTML = `
       <div class="category-list">
         ${subCats.map(s => `
