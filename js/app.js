@@ -48,7 +48,7 @@ function getHeaderTitle(view, params) {
   if (view === 'search') return '搜索';
   if (view === 'category') {
     if (params.catName) return decodeURIComponent(params.catName);
-    return params.type === 'formula' ? '方剂分类' : '草药分类';
+     return params.type === 'formula' ? '方剂分类' : params.type === 'internal' ? '病症分类' : '草药分类';
   }
   if (view === 'list') {
     return params.subName ? decodeURIComponent(params.subName) : '条目列表';
