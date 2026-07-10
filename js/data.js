@@ -1,21 +1,25 @@
 let herbsData = null;
 let formulasData = null;
 let internalData = null;
+let acupointData = null;
 
 async function loadAll() {
-  const [herbs, formulas, internal] = await Promise.all([
+  const [herbs, formulas, internal, acupoints] = await Promise.all([
     fetch('./data/herbs.json').then(r => r.json()),
     fetch('./data/formulas.json').then(r => r.json()),
-    fetch('./data/internal_medicine.json').then(r => r.json())
+    fetch('./data/internal_medicine.json').then(r => r.json()),
+    fetch('./data/acupoints.json').then(r => r.json())
   ]);
   herbsData = herbs;
   formulasData = formulas;
   internalData = internal;
+  acupointData = acupoints;
 }
 
 function getAllData(type) {
   if (type === 'formula') return formulasData;
   if (type === 'internal') return internalData;
+  if (type === 'acupoint') return acupointData;
   return herbsData;
 }
 
@@ -50,7 +54,7 @@ function search(keyword) {
   const results = [];
   const seenIds = new Set();
 
-  for (const type of ['herb', 'formula', 'internal']) {
+  for (const type of ['herb', 'formula', 'internal', 'acupoint']) {
     const data = getAllData(type);
     if (!data) continue;
     for (const item of data.searchIndex) {

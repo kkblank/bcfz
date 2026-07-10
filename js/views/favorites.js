@@ -8,7 +8,7 @@ export function render(container) {
     return;
   }
 
-  const label = t => t === 'formula' ? '方剂' : t === 'internal' ? '病症' : '草药';
+  const label = t => t === 'formula' ? '方剂' : t === 'internal' ? '病症' : t === 'acupoint' ? '穴位' : '草药';
 
   container.innerHTML = `
     <div class="item-list">

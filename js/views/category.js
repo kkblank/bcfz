@@ -1,4 +1,4 @@
-import { getCategories, getSubCategories, getCategoryById } from '../data.js';
+import { getCategories, getSubCategories, getCategoryById, getItemsBySubCategory } from '../data.js';
 
 export function render(container, params) {
   const type = params.type || 'herb';
@@ -6,18 +6,18 @@ export function render(container, params) {
 
   if (!catId) {
     const cats = getCategories(type);
-    const label = type === 'formula' ? '方剂' : type === 'internal' ? '病症' : '草药';
+    const label = type === 'formula' ? '方剂' : type === 'internal' ? '病症' : type === 'acupoint' ? '经脉' : '草药';
     container.innerHTML = `
       <div class="category-list">
         ${cats.map(c => `
           <div class="category-card" data-id="${c.id}" data-name="${c.name}">
             <div class="icon">📂</div>
-            <div class="info">
-              <div class="name">${escapeHtml(c.name)}</div>
-              <div class="count">${c.subCategoryIds.length} 个子类</div>
-            </div>
-            <div class="arrow">›</div>
+          <div class="info">
+            <div class="name">${escapeHtml(c.name)}</div>
+            <div class="count">${type === 'acupoint' && c.subCategoryIds.length === 1 ? getItemCount(c.id, type) + ' 个穴位' : c.subCategoryIds.length + ' 个子类'}</div>
           </div>
+          <div class="arrow">›</div>
+        </div>
         `).join('')}
       </div>
       ${cats.length === 0 ? '<div class="empty-state"><div class="empty-icon">🌱</div><div class="empty-text">暂无${label}分类</div></div>' : ''}
@@ -27,23 +27,34 @@ export function render(container, params) {
       card.addEventListener('click', () => {
         const id = card.dataset.id;
         const name = card.dataset.name;
+        // Auto-skip to list view if category has only 1 subcategory
+        const cat = getCategoryById(id, type);
+        if (type === 'acupoint' && cat && cat.subCategoryIds.length === 1) {
+          location.hash = `#list?type=${type}&subId=${cat.subCategoryIds[0]}&subName=${encodeURIComponent('本经腧穴')}&catId=${id}&catName=${encodeURIComponent(name)}`;
+          return;
+        }
         location.hash = `#category?type=${type}&catId=${id}&catName=${encodeURIComponent(name)}`;
       });
     });
   } else {
     const subCats = getSubCategories(catId, type);
-    const label = type === 'formula' ? '个方剂' : type === 'internal' ? '个证型' : '种草药';
+    // Auto-skip to list view for single subCategory
+    if (type === 'acupoint' && subCats.length === 1) {
+      location.hash = `#list?type=${type}&subId=${subCats[0].id}&subName=${encodeURIComponent('本经腧穴')}&catId=${catId}&catName=${encodeURIComponent(params.catName || '')}`;
+      return;
+    }
+    const label = type === 'formula' ? '个方剂' : type === 'internal' ? '个证型' : type === 'acupoint' ? '个穴位' : '种草药';
     container.innerHTML = `
       <div class="category-list">
         ${subCats.map(s => `
           <div class="category-card" data-id="${s.id}" data-name="${s.name}">
             <div class="icon">${type === 'formula' ? '📜' : '🍃'}</div>
-            <div class="info">
-              <div class="name">${escapeHtml(s.name)}</div>
-              <div class="count">${s.herbIds.length} ${label}</div>
-            </div>
-            <div class="arrow">›</div>
+          <div class="info">
+            <div class="name">${escapeHtml(s.name)}</div>
+            <div class="count">${(s.herbIds || []).length} ${label}</div>
           </div>
+          <div class="arrow">›</div>
+        </div>
         `).join('')}
       </div>
       ${subCats.length === 0 ? '<div class="empty-state"><div class="empty-icon">🌱</div><div class="empty-text">暂无内容</div></div>' : ''}
@@ -63,4 +74,14 @@ export function render(container, params) {
 function escapeHtml(str) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
   return str.replace(/[&<>"']/g, c => map[c]);
+}
+
+export function getItemCount(catId, type) {
+  const subs = getSubCategories(catId, type);
+  let total = 0;
+  for (const sub of subs) {
+    const items = getItemsBySubCategory(sub.id, type);
+    total += items.length;
+  }
+  return total;
 }

@@ -686,3 +686,111 @@ body {
   text-align: center;
   padding: 8px 0;
 }
+
+/* ── Acupoint Theme ── */
+:root {
+  --acupoint-primary: #8e24aa;
+  --acupoint-light: #ce93d8;
+  --acupoint-gradient: linear-gradient(135deg, #7b1fa2 0%, #ce93d8 100%);
+}
+
+.type-card.acupoint { border-top: 4px solid var(--acupoint-light); }
+.type-card.acupoint .type-name { color: var(--acupoint-primary); }
+
+.item-card.acupoint { border-left: 3px solid var(--acupoint-light); }
+.item-card.acupoint .number { background: var(--acupoint-gradient); color: #fff; }
+
+.detail-header.acupoint { background: var(--acupoint-gradient); }
+.detail-header.acupoint .header-actions span { color: rgba(255,255,255,0.9); }
+
+.category-card.acupoint { border-left: 3px solid var(--acupoint-light); }
+.category-card.acupoint .info .name { color: var(--acupoint-primary); }
+
+.result-card.acupoint { border-left: 3px solid var(--acupoint-light); }
+.result-card.acupoint .r-badge { background: var(--acupoint-primary); color: #fff; }
+.result-card.acupoint .r-name { color: var(--acupoint-primary); }
+
+.acupoint-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.acupoint-map-section {
+  background: var(--card-bg, #fff);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.acupoint-cat-section {
+  padding: 0 4px;
+}
+
+.acupoint-cat-section .section-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  padding: 8px 0;
+  margin: 0 0 8px 0;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.acupoint-image-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 5px;
+}
+
+.acupoint-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.acupoint-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin: 5px 0 0;
+}
+
+.acupoint-prompt {
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+  padding: 20px 0;
+}
+
+.acupoint-options {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.acupoint-btn {
+  padding: 8px 18px;
+  border: 1px solid var(--acupoint-light, #ce93d8);
+  background: transparent;
+  border-radius: 20px;
+  color: var(--acupoint-primary, #8e24aa);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.acupoint-btn:hover,
+.acupoint-btn.active {
+  background: var(--acupoint-primary, #8e24aa);
+  color: #fff;
+  border-color: var(--acupoint-primary, #8e24aa);
+}
+
+:root.dark {
+  --acupoint-gradient: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%);
+}
+:root.dark .acupoint-map-section {
+  background: var(--card-bg, #1e1e1e);
+}

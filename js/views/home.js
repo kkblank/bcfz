@@ -54,7 +54,7 @@ export async function render(container) {
       <div class="type-card acupoint" data-type="acupoint">
         <div class="type-icon">🧍</div>
         <div class="type-name">人体穴位</div>
-        <div class="type-desc">查看正面、背面、侧面穴位分布图</div>
+        <div class="type-desc">查询经脉腧穴定位与主治，查看穴位分布图</div>
       </div>
       <div class="type-card internal" data-type="internal">
         <div class="type-icon">🏥</div>

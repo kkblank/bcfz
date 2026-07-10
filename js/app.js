@@ -48,7 +48,7 @@ function getHeaderTitle(view, params) {
   if (view === 'search') return '搜索';
   if (view === 'category') {
     if (params.catName) return decodeURIComponent(params.catName);
-     return params.type === 'formula' ? '方剂分类' : params.type === 'internal' ? '病症分类' : '草药分类';
+     return params.type === 'formula' ? '方剂分类' : params.type === 'internal' ? '病症分类' : params.type === 'acupoint' ? '经脉分类' : '草药分类';
   }
   if (view === 'list') {
     return params.subName ? decodeURIComponent(params.subName) : '条目列表';
@@ -69,7 +69,7 @@ function renderBreadcrumb(view, params) {
   }
   el.style.display = '';
 
-  const typeName = params.type === 'formula' ? '方剂学' : params.type === 'internal' ? '内科学' : '中药学';
+  const typeName = params.type === 'formula' ? '方剂学' : params.type === 'internal' ? '内科学' : params.type === 'acupoint' ? '腧穴学' : '中药学';
   const parts = ['<a href="#/">首页</a>'];
 
   if (view === 'category') {
