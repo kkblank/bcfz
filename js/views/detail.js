@@ -5,6 +5,7 @@ const HERB_PROP_ORDER = ['药性', '归经', '功效', '应用', '用法用量',
 const FORMULA_PROP_ORDER = ['组成', '用法', '功用', '主治', '证治机理', '方解', '运用', '附方', '鉴别', '方论选录', '医案举例', '方歌'];
 const INTERNAL_PROP_ORDER = ['临床表现', '证机概要', '治法', '代表方', '常用药'];
 const ACUPOINT_PROP_ORDER = ['定位', '解剖', '主治', '操作'];
+const ACUPUNCTURE_PROP_ORDER = ['概述', '辨证', '治疗', '按语'];
 
 export function render(container, params) {
   const type = params.type || 'herb';
@@ -23,7 +24,7 @@ export function render(container, params) {
 
   addRecentView({ id: item.id, name: item.name, type });
 
-  const order = type === 'formula' ? FORMULA_PROP_ORDER : type === 'internal' ? INTERNAL_PROP_ORDER : type === 'acupoint' ? ACUPOINT_PROP_ORDER : HERB_PROP_ORDER;
+  const order = type === 'formula' ? FORMULA_PROP_ORDER : type === 'internal' ? INTERNAL_PROP_ORDER : type === 'acupoint' ? ACUPOINT_PROP_ORDER : type === 'acupuncture' ? ACUPUNCTURE_PROP_ORDER : HERB_PROP_ORDER;
   const propKeys = order.filter(k => item.properties[k]);
   const extraKeys = Object.keys(item.properties).filter(k => !order.includes(k));
   const fav = isFavorite(id);

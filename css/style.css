@@ -15,7 +15,10 @@
   --radius: 12px;
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   --font-scale: 1;
-}
+
+  --acupuncture-primary: #c62828;
+  --acupuncture-light: #ef5350;
+  --acupuncture-gradient: linear-gradient(135deg, #c62828 0%, #ef5350 100%);}
 
 :root.dark {
   --bg: #121212;
@@ -28,7 +31,10 @@
   --herb-gradient: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
   --formula-gradient: linear-gradient(135deg, #bf360c 0%, #e65100 100%);
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-}
+
+  --acupuncture-primary: #c62828;
+  --acupuncture-light: #ef5350;
+  --acupuncture-gradient: linear-gradient(135deg, #c62828 0%, #ef5350 100%);}
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -710,6 +716,18 @@ body {
 .result-card.acupoint .r-badge { background: var(--acupoint-primary); color: #fff; }
 .result-card.acupoint .r-name { color: var(--acupoint-primary); }
 
+/* ========== 针灸疗法 ========== */
+.type-card.acupuncture { border-top: 4px solid var(--acupuncture-light); }
+.type-card.acupuncture .type-name { color: var(--acupuncture-primary); }
+.item-card.acupuncture { border-left: 3px solid var(--acupuncture-light); }
+.item-card.acupuncture .number { background: var(--acupuncture-gradient); color: #fff; }
+.detail-header.acupuncture { background: var(--acupuncture-gradient); }
+.detail-header.acupuncture .header-actions span { color: rgba(255,255,255,0.9); }
+.category-card.acupuncture { border-left: 3px solid var(--acupuncture-light); }
+.category-card.acupuncture .info .name { color: var(--acupuncture-primary); }
+.result-card.acupuncture { border-left: 3px solid var(--acupuncture-light); }
+.result-card.acupuncture .r-badge { background: var(--acupuncture-primary); color: #fff; }
+.result-card.acupuncture .r-name { color: var(--acupuncture-primary); }
 .acupoint-layout {
   display: flex;
   flex-direction: column;
@@ -790,6 +808,7 @@ body {
 
 :root.dark {
   --acupoint-gradient: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%);
+  --acupuncture-gradient: linear-gradient(135deg, #b71c1c 0%, #e53935 100%);
 }
 :root.dark .acupoint-map-section {
   background: var(--card-bg, #1e1e1e);

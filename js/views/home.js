@@ -56,6 +56,11 @@ export async function render(container) {
         <div class="type-name">人体穴位</div>
         <div class="type-desc">查询经脉腧穴定位与主治，查看穴位分布图</div>
       </div>
+      <div class="type-card acupuncture" data-type="acupuncture">
+        <div class="type-icon">🔴</div>
+        <div class="type-name">针灸疗法</div>
+        <div class="type-desc">查询针灸治疗各科疾病的辨证选穴与操作</div>
+      </div>
       <div class="type-card internal" data-type="internal">
         <div class="type-icon">🏥</div>
         <div class="type-name">内科学</div>

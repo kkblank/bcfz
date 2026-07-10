@@ -9,7 +9,7 @@ export function render(container, params) {
   }
 
   const items = getItemsBySubCategory(subId, type);
-  const label = type === 'formula' ? '方剂' : type === 'internal' ? '证型' : type === 'acupoint' ? '穴位' : '草药';
+  const label = type === 'formula' ? '方剂' : type === 'internal' ? '证型' : type === 'acupoint' ? '穴位' : type === 'acupuncture' ? '病证' : '草药';
 
   container.innerHTML = `
     <div class="item-list">
@@ -18,7 +18,7 @@ export function render(container, params) {
           <div class="number">${i + 1}</div>
           <div class="info">
             <div class="name">${escapeHtml(item.name)}</div>
-            <div class="summary">${escapeHtml(item.properties['临床表现'] || item.properties['功效'] || item.properties['功用'] || item.properties['治法'] || item.properties['定位'] || '')}</div>
+            <div class="summary">${escapeHtml(item.properties['临床表现'] || item.properties['功效'] || item.properties['功用'] || item.properties['治法'] || item.properties['定位'] || item.properties['概述'] || '')}</div>
           </div>
           <div class="arrow">›</div>
         </div>

@@ -6,7 +6,7 @@ export function render(container, params) {
 
   if (!catId) {
     const cats = getCategories(type);
-    const label = type === 'formula' ? '方剂' : type === 'internal' ? '病症' : type === 'acupoint' ? '经脉' : '草药';
+    const label = type === 'formula' ? '方剂' : type === 'internal' ? '病症' : type === 'acupoint' ? '经脉' : type === 'acupuncture' ? '病证' : '草药';
     container.innerHTML = `
       <div class="category-list">
         ${cats.map(c => `
@@ -14,7 +14,7 @@ export function render(container, params) {
             <div class="icon">📂</div>
           <div class="info">
             <div class="name">${escapeHtml(c.name)}</div>
-            <div class="count">${type === 'acupoint' && c.subCategoryIds.length === 1 ? getItemCount(c.id, type) + ' 个穴位' : c.subCategoryIds.length + ' 个子类'}</div>
+            <div class="count">${(type === 'acupoint' || type === 'acupuncture') && c.subCategoryIds.length === 1 ? getItemCount(c.id, type) + (type === 'acupoint' ? ' 个穴位' : ' 个病证') : c.subCategoryIds.length + ' 个子类'}</div>
           </div>
           <div class="arrow">›</div>
         </div>
@@ -29,8 +29,9 @@ export function render(container, params) {
         const name = card.dataset.name;
         // Auto-skip to list view if category has only 1 subcategory
         const cat = getCategoryById(id, type);
-        if (type === 'acupoint' && cat && cat.subCategoryIds.length === 1) {
-          location.hash = `#list?type=${type}&subId=${cat.subCategoryIds[0]}&subName=${encodeURIComponent('本经腧穴')}&catId=${id}&catName=${encodeURIComponent(name)}`;
+        if ((type === 'acupoint' || type === 'acupuncture') && cat && cat.subCategoryIds.length === 1) {
+          const subName = type === 'acupoint' ? '本经腧穴' : '病症列表';
+          location.hash = `#list?type=${type}&subId=${cat.subCategoryIds[0]}&subName=${encodeURIComponent(subName)}&catId=${id}&catName=${encodeURIComponent(name)}`;
           return;
         }
         location.hash = `#category?type=${type}&catId=${id}&catName=${encodeURIComponent(name)}`;
@@ -39,11 +40,12 @@ export function render(container, params) {
   } else {
     const subCats = getSubCategories(catId, type);
     // Auto-skip to list view for single subCategory
-    if (type === 'acupoint' && subCats.length === 1) {
-      location.hash = `#list?type=${type}&subId=${subCats[0].id}&subName=${encodeURIComponent('本经腧穴')}&catId=${catId}&catName=${encodeURIComponent(params.catName || '')}`;
+    if ((type === 'acupoint' || type === 'acupuncture') && subCats.length === 1) {
+      const subName = type === 'acupoint' ? '本经腧穴' : '病症列表';
+      location.hash = `#list?type=${type}&subId=${subCats[0].id}&subName=${encodeURIComponent(subName)}&catId=${catId}&catName=${encodeURIComponent(params.catName || '')}`;
       return;
     }
-    const label = type === 'formula' ? '个方剂' : type === 'internal' ? '个证型' : type === 'acupoint' ? '个穴位' : '种草药';
+    const label = type === 'formula' ? '个方剂' : type === 'internal' ? '个证型' : type === 'acupoint' ? '个穴位' : type === 'acupuncture' ? '个病证' : '种草药';
     container.innerHTML = `
       <div class="category-list">
         ${subCats.map(s => `

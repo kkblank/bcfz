@@ -32,7 +32,7 @@ export function render(container, params) {
       <div class="result-count">找到 ${results.length} 条结果</div>
       ${results.map(r => `
         <div class="result-card ${r.dataType}" data-id="${r.id}" data-name="${r.name}" data-type="${r.dataType}">
-            <div class="r-badge">${r.dataType === 'formula' ? '方剂' : r.dataType === 'internal' ? '内科' : r.dataType === 'acupoint' ? '穴位' : '草药'}</div>
+            <div class="r-badge">${r.dataType === 'formula' ? '方剂' : r.dataType === 'internal' ? '内科' : r.dataType === 'acupoint' ? '穴位' : r.dataType === 'acupuncture' ? '针灸' : '草药'}</div>
           <div class="r-name">${escapeHtml(r.name)}</div>
           <div class="r-desc">${escapeHtml(r.properties['功效'] || r.properties['功用'] || r.properties['主治'] || '')}</div>
           <div class="r-match">匹配：${r.matchType}</div>
