@@ -15,7 +15,7 @@ export function render(container, params) {
     <div class="search-box">
       <div class="search-input-wrap">
         <span>🔍</span>
-        <input type="text" id="search-input" placeholder="搜索名称、功效、功用、主治..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="可空格分隔多个关键词，如：头痛 甘草" autocomplete="off">
         <button class="clear-btn" id="clear-input-btn" style="display:none">✕</button>
       </div>
       <button class="search-btn" id="search-btn">搜索</button>

@@ -54,22 +54,28 @@ function getItemById(itemId, type) {
 
 function search(keyword) {
   if (!keyword || !keyword.trim()) return [];
-  const kw = keyword.toLowerCase();
+  const terms = keyword.trim().toLowerCase().split(/\s+/).filter(Boolean);
   const results = [];
   const seenIds = new Set();
 
   for (const type of ['herb', 'formula', 'internal', 'acupoint', 'acupuncture']) {
     const data = getAllData(type);
     if (!data) continue;
+
+    const indexByItem = new Map();
     for (const item of data.searchIndex) {
-      if (item.text.toLowerCase().includes(kw)) {
-        const dedupKey = `${type}:${item.itemId}`;
+      const prev = indexByItem.get(item.itemId) || '';
+      indexByItem.set(item.itemId, prev + ' ' + item.text);
+    }
+
+    for (const herb of data.herbs) {
+      const combined = (indexByItem.get(herb.id) || '').toLowerCase();
+      if (terms.every(t => combined.includes(t))) {
+        const dedupKey = `${type}:${herb.id}`;
         if (!seenIds.has(dedupKey)) {
-          const herb = data.herbs.find(h => h.id === item.itemId);
-          if (herb) {
-            results.push({ ...herb, matchType: item.type, dataType: type });
-            seenIds.add(dedupKey);
-          }
+          const entries = data.searchIndex.filter(i => i.itemId === herb.id);
+          results.push({ ...herb, matchType: entries.length ? entries[0].type : '', dataType: type });
+          seenIds.add(dedupKey);
         }
       }
     }
