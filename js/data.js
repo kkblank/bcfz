@@ -63,11 +63,12 @@ function search(keyword) {
     if (!data) continue;
     for (const item of data.searchIndex) {
       if (item.text.toLowerCase().includes(kw)) {
-        if (!seenIds.has(item.itemId)) {
+        const dedupKey = `${type}:${item.itemId}`;
+        if (!seenIds.has(dedupKey)) {
           const herb = data.herbs.find(h => h.id === item.itemId);
           if (herb) {
             results.push({ ...herb, matchType: item.type, dataType: type });
-            seenIds.add(item.itemId);
+            seenIds.add(dedupKey);
           }
         }
       }

@@ -459,6 +459,48 @@ body {
   margin-bottom: calc(12px * var(--font-scale));
 }
 
+.result-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: calc(8px * var(--font-scale));
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: calc(12px * var(--font-scale));
+  padding-bottom: calc(2px * var(--font-scale));
+}
+
+.result-tab {
+  flex: 0 0 auto;
+  font-size: calc(13px * var(--font-scale));
+  color: var(--text-secondary);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color, #eee);
+  border-radius: calc(16px * var(--font-scale));
+  padding: calc(5px * var(--font-scale)) calc(12px * var(--font-scale));
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.result-tab .tab-count {
+  font-size: calc(11px * var(--font-scale));
+  opacity: 0.8;
+}
+
+.result-tab.active {
+  color: #fff;
+  border-color: transparent;
+}
+
+.result-tab.active.herb { background: var(--herb-primary); }
+.result-tab.active.formula { background: var(--formula-primary); }
+.result-tab.active.internal { background: #1565c0; }
+.result-tab.active.acupoint { background: var(--acupoint-primary); }
+.result-tab.active.acupuncture { background: var(--acupuncture-primary); }
+.result-tab.active.all {
+  background: var(--text-secondary);
+}
+
 .result-card {
   background: var(--card-bg);
   border-radius: var(--radius);

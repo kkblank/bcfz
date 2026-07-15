@@ -1,6 +1,15 @@
 import { search } from '../data.js';
 import { getRecentSearches, saveRecentSearch, clearRecentSearches } from '../store.js';
 
+const TYPE_ORDER = ['herb', 'formula', 'internal', 'acupoint', 'acupuncture'];
+const TYPE_LABEL = {
+  herb: '草药',
+  formula: '方剂',
+  internal: '内科',
+  acupoint: '穴位',
+  acupuncture: '针灸'
+};
+
 export function render(container, params) {
   container.innerHTML = `
     <div class="search-box">
@@ -21,26 +30,45 @@ export function render(container, params) {
   const resultsEl = document.getElementById('search-results');
   const recentEl = document.getElementById('search-recent');
 
-  function doSearch() {
-    const kw = input.value.trim();
-    if (!kw) return;
-    const results = search(kw);
-    saveRecentSearch(kw);
-    renderRecent();
+  let currentResults = [];
+  let activeTab = 'all';
 
-    resultsEl.innerHTML = `
-      <div class="result-count">找到 ${results.length} 条结果</div>
-      ${results.map(r => `
-        <div class="result-card ${r.dataType}" data-id="${r.id}" data-name="${r.name}" data-type="${r.dataType}">
-            <div class="r-badge">${r.dataType === 'formula' ? '方剂' : r.dataType === 'internal' ? '内科' : r.dataType === 'acupoint' ? '穴位' : r.dataType === 'acupuncture' ? '针灸' : '草药'}</div>
-          <div class="r-name">${escapeHtml(r.name)}</div>
-          <div class="r-desc">${escapeHtml(r.properties['功效'] || r.properties['功用'] || r.properties['主治'] || '')}</div>
-          <div class="r-match">匹配：${r.matchType}</div>
-        </div>
-      `).join('')}
-      ${results.length === 0 ? '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">未找到相关结果</div><div class="empty-hint">试试其他关键词吧</div></div>' : ''}
-    `;
+  function groupByType(results) {
+    const grouped = {};
+    for (const type of TYPE_ORDER) grouped[type] = [];
+    for (const r of results) {
+      if (grouped[r.dataType]) grouped[r.dataType].push(r);
+    }
+    return grouped;
+  }
 
+  function renderTabs(grouped) {
+    const tabs = [{ type: 'all', label: '全部', count: currentResults.length }];
+    for (const type of TYPE_ORDER) {
+      if (grouped[type].length) {
+        tabs.push({ type, label: TYPE_LABEL[type], count: grouped[type].length });
+      }
+    }
+    return tabs.map(t => `
+      <div class="result-tab ${t.type}${t.type === activeTab ? ' active' : ''}" data-type="${t.type}">
+        ${t.label} <span class="tab-count">${t.count}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderCards(grouped) {
+    const list = activeTab === 'all' ? currentResults : (grouped[activeTab] || []);
+    return list.map(r => `
+      <div class="result-card ${r.dataType}" data-id="${r.id}" data-name="${r.name}" data-type="${r.dataType}">
+        <div class="r-badge">${TYPE_LABEL[r.dataType] || '草药'}</div>
+        <div class="r-name">${escapeHtml(r.name)}</div>
+        <div class="r-desc">${escapeHtml(r.properties['功效'] || r.properties['功用'] || r.properties['主治'] || '')}</div>
+        <div class="r-match">匹配：${r.matchType}</div>
+      </div>
+    `).join('');
+  }
+
+  function bindCards() {
     resultsEl.querySelectorAll('.result-card').forEach(card => {
       card.addEventListener('click', () => {
         const id = card.dataset.id;
@@ -49,6 +77,46 @@ export function render(container, params) {
         location.hash = `#detail?type=${dtype}&id=${id}&name=${encodeURIComponent(name)}`;
       });
     });
+  }
+
+  function bindTabs() {
+    resultsEl.querySelectorAll('.result-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        activeTab = tab.dataset.type;
+        const grouped = groupByType(currentResults);
+        resultsEl.querySelector('.result-tabs').innerHTML = renderTabs(grouped);
+        resultsEl.querySelector('#card-list').innerHTML = renderCards(grouped);
+        bindTabs();
+        bindCards();
+      });
+    });
+  }
+
+  function doSearch() {
+    const kw = input.value.trim();
+    if (!kw) return;
+    currentResults = search(kw);
+    activeTab = 'all';
+    saveRecentSearch(kw);
+    renderRecent();
+
+    const grouped = groupByType(currentResults);
+
+    if (currentResults.length === 0) {
+      resultsEl.innerHTML = `
+        <div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">未找到相关结果</div><div class="empty-hint">试试其他关键词吧</div></div>
+      `;
+      return;
+    }
+
+    resultsEl.innerHTML = `
+      <div class="result-count">找到 ${currentResults.length} 条结果</div>
+      <div class="result-tabs">${renderTabs(grouped)}</div>
+      <div id="card-list">${renderCards(grouped)}</div>
+    `;
+
+    bindTabs();
+    bindCards();
   }
 
   function renderRecent() {
